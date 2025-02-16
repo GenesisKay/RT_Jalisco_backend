@@ -1,31 +1,28 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Estadisticas } from './entities/estadisticas.entity';
-import { EstadisticasService } from './Estadisticas/estadisticas.service'; 
-import { EstadisticasController } from './Estadisticas/estadisticas.controller'; 
+import { ConfigModule } from '@nestjs/config';
 import { EstadisticasModule } from './Estadisticas/estadisticas.module';
+import { Estadisticas } from './entities/estadisticas.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // Cargar variables de entorno
+
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',        
-      port: 5432,               
-      username: 'transporte_usuario', 
-      password: 'Popobebe123/',  
-      database: 'rt_transporte', 
+      host: process.env.DB_HOST,        
+      port: Number(process.env.DB_PORT),               
+      username: process.env.DB_USER, 
+      password: process.env.DB_PASSWORD,  
+      database: process.env.DB_NAME, 
       autoLoadEntities: true,    
-      synchronize: true,        
-    }),
-    TypeOrmModule.forFeature([Estadisticas]),
-    
+      synchronize: true,   
+      ssl: {
+        rejectUnauthorized: false,  // Acepta certificados sin validar
+      },
+    }),    
+
+    EstadisticasModule, // Se usa directamente en imports
   ],
-  controllers: [EstadisticasController],
-  providers: [EstadisticasService],
-})
-@Module({
-  imports: [EstadisticasModule],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
