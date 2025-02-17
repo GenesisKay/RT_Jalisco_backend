@@ -6,7 +6,7 @@ import { Estadisticas } from './entities/estadisticas.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // Cargar variables de entorno
+    ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -22,7 +22,7 @@ import { Estadisticas } from './entities/estadisticas.entity';
       },
     }),    
 
-    EstadisticasModule, // Se usa directamente en imports
+    EstadisticasModule,
   ],
 })
 export class AppModule {}
